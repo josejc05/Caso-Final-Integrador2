@@ -52,3 +52,20 @@ std::string Variant::to_string() const {
     }
 }
 
+std::string Variant::to_json_string() const {
+    // Implementación de to_json_string
+}
+
+Variant Variant::from_json_string(const std::string& sjson) {
+    // Implementación de from_json_string
+}
+
+Variant Variant::parse_json(const std::map<std::string, Variant>& json_map) {
+    // Implementación de parse_json
+}
+
+int main() {
+    // Código principal
+    // ...
+    return 0;
+}
