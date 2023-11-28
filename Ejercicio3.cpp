@@ -52,4 +52,42 @@ std::string Variant::to_string() const {
     }
 }
 
+std::string Variant::to_json_string() const {
+    switch (type) {
+        case Symbol:
+        case Number:
+        case Cadena:
+            return "\"" + val + "\"";
+        case List: {
+            std::string result = "[";
+            for (const auto& item : list) {
+                result += item.to_json_string() + ",";
+            }
+            if (!list.empty()) {
+                result.pop_back(); // Remove the trailing comma
+            }
+            result += "]";
+            return result;
+        }
+        case Proc:
+            return "\"<Procedure>\"";
+        case Lambda:
+            return "\"<Lambda>\"";
+        default:
+            return "\"<Unknown>\"";
+    }
+}
 
+Variant Variant::from_json_string(const std::string& sjson) {
+    // Implementación de from_json_string
+}
+
+Variant Variant::parse_json(const std::map<std::string, Variant>& json_map) {
+    // Implementación de parse_json
+}
+
+int main() {
+    // Código principal
+    // ...
+    return 0;
+}
