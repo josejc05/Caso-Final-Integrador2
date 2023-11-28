@@ -45,3 +45,47 @@ Variant Variant::parse_json(const std::map<std::string, Variant>& json_map) {
     // Implementación de parse_json
 }
 
+Variant Variant::parse_json_internal(const std::string& json) {
+    std::istringstream stream(json);
+    char ch;
+    stream >> std::ws >> ch;
+
+    if (ch == '{') {
+        // Es un objeto JSON
+        std::map<std::string, Variant> json_map;
+        while (stream >> std::ws >> ch && ch != '}') {
+            std::string key;
+            if (ch == '"') {
+                std::getline(stream, key, '"');
+                stream >> ch; // Consume the ':'
+                json_map[key] = parse_json_internal(stream.str());
+            }
+        }
+        return Variant::parse_json(json_map);
+    } else if (ch == '[') {
+        // Es una lista JSON
+        std::vector<Variant> json_list;
+        while (stream >> std::ws >> ch && ch != ']') {
+            stream.unget();
+            json_list.push_back(parse_json_internal(stream.str()));
+        }
+        return Variant(List, json_list);
+    } else if (ch == '"') {
+        // Es una cadena JSON
+        std::string value;
+        std::getline(stream, value, '"');
+        return Variant(Cadena, value);
+    } else {
+        // Es un valor simple (número, símbolo, etc.)
+        stream.unget();
+        std::string value;
+        stream >> value;
+        return Variant(Cadena, value);
+    }
+}
+
+int main() {
+    // Código principal
+    // ...
+    return 0;
+}
